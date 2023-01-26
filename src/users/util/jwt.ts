@@ -1,8 +1,8 @@
 import { sign, verify } from "jsonwebtoken";
 import { APP } from "../../core/config/app";
-import { CookiesInstance } from "../../core/config/cookies";
 import { CreateTokenRepository, DeleteByIdRepository } from "../repositories";
 import ms from "ms";
+import { CookiesInstance } from "./cookies";
 
 type IssueJWTokenParams = {
   app: APP;

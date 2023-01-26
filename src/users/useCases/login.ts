@@ -1,5 +1,4 @@
 import { APP } from "../../core/config/app";
-import { CookiesInstance } from "../../core/config/cookies";
 import { handleErrors } from "../../core/config/error";
 import { ApiResponse } from "../../core/config/types";
 import { DeleteManyByIdRepository } from "../../core/data/repositories";
@@ -8,6 +7,7 @@ import {
   CreateTokenRepository,
   FindUserByEmailRepository,
 } from "../repositories";
+import { CookiesInstance } from "../util/cookies";
 import { compareHash } from "../util/hash";
 import { issueJWToken } from "../util/jwt";
 import { loginValidation } from "../validator/login";

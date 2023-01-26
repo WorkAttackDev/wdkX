@@ -1,8 +1,8 @@
 import { APP } from "../../core/config/app";
-import { CookiesInstance } from "../../core/config/cookies";
 import { handleErrors } from "../../core/config/error";
 import { ApiResponse } from "../../core/config/types";
 import { DeleteByIdRepository } from "../repositories";
+import { CookiesInstance } from "../util/cookies";
 
 export type LogoutUseCaseParams = {
   deleteTokenByToken: DeleteByIdRepository;
