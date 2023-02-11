@@ -3,6 +3,7 @@ import { APP } from "../../core/config/app";
 import { CreateTokenRepository, DeleteByIdRepository } from "../repositories";
 import ms from "ms";
 import { CookiesInstance } from "./cookies";
+import { MsValue } from "../../core/utils/ms-utils";
 
 type IssueJWTokenParams = {
   app: APP;
@@ -10,26 +11,30 @@ type IssueJWTokenParams = {
   userId: string;
   userRole?: string;
   cookies?: CookiesInstance;
+  accessTokenExpiresIn?: MsValue;
+  refreshTokenExpiresIn?: MsValue;
   deleteUserRefreshTokens: DeleteByIdRepository;
   createRefreshToken: CreateTokenRepository<"REFRESH_TOKEN">;
 };
 
 export const issueJWToken = async ({
   app,
-  generateRefreshToken = false,
   userId,
+  cookies,
   userRole,
+  accessTokenExpiresIn = "60Minutes",
+  refreshTokenExpiresIn = "60Days",
+  generateRefreshToken = false,
   createRefreshToken,
   deleteUserRefreshTokens,
-  cookies,
 }: IssueJWTokenParams) => {
   const token = sign({ userRole }, app.API_SECRET, {
-    expiresIn: "15Min",
+    expiresIn: accessTokenExpiresIn,
     subject: userId,
   });
 
   cookies?.writeCookie({
-    maxAge: ms("15Min"),
+    maxAge: ms(accessTokenExpiresIn),
     value: token,
     name: app.ACCESS_TOKEN_COOKIE_NAME,
   });
@@ -38,9 +43,9 @@ export const issueJWToken = async ({
 
   await deleteUserRefreshTokens(userId);
 
-  const expiresAt = Date.now() + ms("60Days");
+  const expiresAt = ms(refreshTokenExpiresIn);
 
-  const refetchToken = await createRefreshToken({
+  const refreshToken = await createRefreshToken({
     expiresAt: new Date(expiresAt),
     type: "REFRESH_TOKEN",
     userId: userId,
@@ -48,14 +53,14 @@ export const issueJWToken = async ({
 
   cookies &&
     cookies.writeCookie({
-      maxAge: ms("60Days"),
-      value: refetchToken.token,
+      maxAge: ms(refreshTokenExpiresIn),
+      value: refreshToken.token,
       name: app.REFRESH_TOKEN_COOKIE_NAME,
     });
 
   return {
     token,
-    refreshToken: refetchToken,
+    refreshToken: refreshToken,
   };
 };
 

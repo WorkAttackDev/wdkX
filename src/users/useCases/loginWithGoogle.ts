@@ -1,6 +1,7 @@
 import { APP } from "../../core/config/app";
 import { handleErrors } from "../../core/config/error";
 import { ApiResponse } from "../../core/config/types";
+import { MsValue } from "../../core/utils/ms-utils";
 import { User } from "../models/User";
 import {
   CreateTokenRepository,
@@ -19,17 +20,21 @@ import { sanitizeUser } from "./utils/index";
 type Params = {
   app: APP;
   data: LoginWithGoogleValidationParams;
-  findUserByEmail: FindUserByEmailRepository;
   cookies?: CookiesInstance;
-  deleteUserRefreshTokens: DeleteByIdRepository;
+  accessTokenExpiresIn?: MsValue;
+  refreshTokenExpiresIn?: MsValue;
+  findUserByEmail: FindUserByEmailRepository;
   createRefreshToken: CreateTokenRepository<"REFRESH_TOKEN">;
   createUserWithProvider: CreateUserRepository<LoginWithGoogleValidationParams>;
+  deleteUserRefreshTokens: DeleteByIdRepository;
 };
 
 export const loginWithGoogleUseCase = async ({
   app,
   data,
   cookies,
+  accessTokenExpiresIn,
+  refreshTokenExpiresIn,
   findUserByEmail,
   createRefreshToken,
   createUserWithProvider,
@@ -56,6 +61,8 @@ export const loginWithGoogleUseCase = async ({
         userRole: user.role,
         cookies,
         generateRefreshToken: true,
+        accessTokenExpiresIn,
+        refreshTokenExpiresIn,
       });
 
       return { data: { token, user: sanitizeUser(user) }, errors: null };
@@ -70,6 +77,8 @@ export const loginWithGoogleUseCase = async ({
       userId: newUser.id,
       cookies,
       generateRefreshToken: true,
+      accessTokenExpiresIn,
+      refreshTokenExpiresIn,
     });
 
     return { data: { token, user: sanitizeUser(newUser) }, errors: null };

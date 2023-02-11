@@ -9,4 +9,7 @@ export { activateUserUseCase } from "./useCases/activateUser";
 export { forgotPasswordUseCase } from "./useCases/forgotPassword";
 export { meUseCase } from "./useCases/me";
 export { confirmActivateUserUseCase } from "./useCases/confirmActivateUser";
-export * as Utils from "./util";
+export * as UserUtils from "./util";
+export * from "./repositories";
+export * from "./models/Token";
+export * from "./models/User";

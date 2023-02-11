@@ -5,6 +5,7 @@ import {
   DeleteManyByIdRepository,
   FindByIdRepository,
 } from "../../core/data/repositories";
+import { MsValue } from "../../core/utils/ms-utils";
 import { FullUser, User } from "../models/User";
 import {
   CreateTokenRepository,
@@ -18,6 +19,8 @@ import { sanitizeUser } from "./utils/index";
 export const refreshTokenUseCase = async <T>({
   app,
   cookies,
+  accessTokenExpiresIn,
+  refreshTokenExpiresIn,
   createRefreshToken,
   deleteTokenRepository,
   deleteUserRefreshTokens,
@@ -31,6 +34,8 @@ export const refreshTokenUseCase = async <T>({
   deleteUserRefreshTokens: DeleteManyByIdRepository;
   createRefreshToken: CreateTokenRepository<"REFRESH_TOKEN">;
   cookies: CookiesInstance;
+  accessTokenExpiresIn?: MsValue;
+  refreshTokenExpiresIn?: MsValue;
 }): Promise<ApiResponse<T | User | null>> => {
   const refreshToken = cookies.readCookie(app.REFRESH_TOKEN_COOKIE_NAME);
 
@@ -68,6 +73,8 @@ export const refreshTokenUseCase = async <T>({
       createRefreshToken,
       deleteUserRefreshTokens,
       cookies,
+      accessTokenExpiresIn,
+      refreshTokenExpiresIn,
     });
 
     // TODO: refactor this

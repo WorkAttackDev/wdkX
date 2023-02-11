@@ -2,6 +2,7 @@ import { APP } from "../../core/config/app";
 import { handleErrors } from "../../core/config/error";
 import { ApiResponse } from "../../core/config/types";
 import { DeleteManyByIdRepository } from "../../core/data/repositories";
+import { MsValue } from "../../core/utils/ms-utils";
 import { User } from "../models/User";
 import {
   CreateTokenRepository,
@@ -16,11 +17,13 @@ import { sanitizeUser } from "./utils/index";
 // Todo - add login e-mail notification
 export const loginUseCase = async <UserType extends User>({
   app,
+  data,
+  cookiesInstance: cookies,
+  accessTokenExpiresIn,
+  refreshTokenExpiresIn,
+  findUserByEmail,
   createRefreshToken,
   deleteUserRefreshTokens,
-  findUserByEmail,
-  cookiesInstance: cookies,
-  data,
 }: {
   data: {
     email: string;
@@ -31,6 +34,8 @@ export const loginUseCase = async <UserType extends User>({
   createRefreshToken: CreateTokenRepository<"REFRESH_TOKEN">;
   deleteUserRefreshTokens: DeleteManyByIdRepository;
   cookiesInstance?: CookiesInstance;
+  accessTokenExpiresIn?: MsValue;
+  refreshTokenExpiresIn?: MsValue;
 }): Promise<ApiResponse<{ token: string; user: UserType } | null>> => {
   try {
     const { email, password } = loginValidation(data);
@@ -58,8 +63,6 @@ export const loginUseCase = async <UserType extends User>({
       });
     }
 
-    // Todo: if the user has more the 3 tokens delete the oldest
-
     const isValidPassword = await compareHash(password, user.password);
 
     if (!isValidPassword) {
@@ -76,6 +79,8 @@ export const loginUseCase = async <UserType extends User>({
       cookies,
       createRefreshToken,
       deleteUserRefreshTokens,
+      accessTokenExpiresIn,
+      refreshTokenExpiresIn,
     });
 
     return {
