@@ -17,6 +17,8 @@ type IssueJWTokenParams = {
   createRefreshToken: CreateTokenRepository<"REFRESH_TOKEN">;
 };
 
+const msToSec = (ms: number) => ms / 1000;
+
 export const issueJWToken = async ({
   app,
   userId,
@@ -34,7 +36,7 @@ export const issueJWToken = async ({
   });
 
   cookies?.writeCookie({
-    maxAge: ms(accessTokenExpiresIn),
+    maxAge: msToSec(Date.now() + ms(accessTokenExpiresIn)),
     value: token,
     name: app.ACCESS_TOKEN_COOKIE_NAME,
   });
@@ -43,7 +45,7 @@ export const issueJWToken = async ({
 
   await deleteUserRefreshTokens(userId);
 
-  const expiresAt = ms(refreshTokenExpiresIn);
+  const expiresAt = Date.now() + ms(refreshTokenExpiresIn);
 
   const refreshToken = await createRefreshToken({
     expiresAt: new Date(expiresAt),
@@ -53,7 +55,7 @@ export const issueJWToken = async ({
 
   cookies &&
     cookies.writeCookie({
-      maxAge: ms(refreshTokenExpiresIn),
+      maxAge: msToSec(expiresAt),
       value: refreshToken.token,
       name: app.REFRESH_TOKEN_COOKIE_NAME,
     });
