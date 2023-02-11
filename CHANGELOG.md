@@ -1,5 +1,11 @@
 # @workattackdev/wdk
 
+## 0.4.1
+
+### Patch Changes
+
+- added publish
+
 ## 0.4.0
 
 ### Minor Changes
