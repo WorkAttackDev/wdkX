@@ -1,5 +1,11 @@
 # @workattackdev/wdk
 
+## 0.4.0
+
+### Minor Changes
+
+- 22d3692: adjust issue token to accept access and refresh token expire date
+
 ## 0.3.1
 
 ### Patch Changes
