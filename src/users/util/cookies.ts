@@ -19,28 +19,38 @@ export const nextJsCookieInstance = ({
   req,
   res,
   app,
+  options,
 }: {
   req: IncomingMessage;
   res: ServerResponse;
   app: APP;
+  options?: {
+    value?: string;
+    maxAge?: number;
+    name?: string;
+    secure?: boolean;
+    sameSite?: boolean | "lax" | "strict" | "none";
+    path?: string;
+  };
 }): CookiesInstance => ({
   writeCookie: ({ value, maxAge, name, secure, sameSite, path }) => {
-    setCookie(name, value, {
+    setCookie(options?.name || name, options?.value || value, {
       req,
       res,
       httpOnly: true,
-      secure: secure || false,
-      maxAge: maxAge,
-      path: path || "/",
+      secure: options?.secure || secure || false,
+      maxAge: options?.maxAge ?? maxAge,
+      expires: new Date(options?.maxAge ?? maxAge * 1000),
+      path: options?.path || path || "/",
       domain: app.DOMAIN,
-      sameSite: sameSite || "lax",
+      sameSite: options?.sameSite || sameSite || "lax",
     });
   },
   cleanCookie: (name, path) =>
     deleteCookie(name, {
       req,
       res,
-      path: path || "/",
+      path: options?.path || path || "/",
       domain: app.DOMAIN,
     }),
   readCookie: (name: string) => {

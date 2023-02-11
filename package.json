@@ -1,6 +1,6 @@
 {
   "name": "@workattackdev/wdk",
-  "version": "0.4.2",
+  "version": "0.4.4",
   "description": "",
   "main": "dist/index.js",
   "module": "dist/index.mjs",
@@ -18,7 +18,8 @@
     "lint": "tsc",
     "version": "changeset",
     "build": "tsup src/index.ts --format esm,cjs --dts",
-    "release": "npm run build && changeset publish"
+    "release": "npm run build && changeset publish",
+    "release-local": "npm run build && changeset && changeset version && changeset publish"
   },
   "keywords": [],
   "author": "WorkAttack",

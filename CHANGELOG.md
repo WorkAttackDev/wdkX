@@ -1,5 +1,17 @@
 # @workattackdev/wdk
 
+## 0.4.4
+
+### Patch Changes
+
+- some fixes
+
+## 0.4.3
+
+### Patch Changes
+
+- fix cookie gen
+
 ## 0.4.2
 
 ### Patch Changes

@@ -17,7 +17,7 @@ type IssueJWTokenParams = {
   createRefreshToken: CreateTokenRepository<"REFRESH_TOKEN">;
 };
 
-const msToSec = (ms: number) => ms / 1000;
+const msToSec = (ms: number) => Math.round(ms / 1000);
 
 export const issueJWToken = async ({
   app,
