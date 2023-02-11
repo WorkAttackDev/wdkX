@@ -4,6 +4,12 @@
 
 ### Patch Changes
 
+- b0122a8: added publish
+
+## 0.4.1
+
+### Patch Changes
+
 - added publish
 
 ## 0.4.0
