@@ -1,5 +1,11 @@
 # @workattackdev/wdk
 
+## 0.4.2
+
+### Patch Changes
+
+- c8944ac: fix: issue jwt date problem
+
 ## 0.4.1
 
 ### Patch Changes
