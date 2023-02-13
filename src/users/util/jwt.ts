@@ -1,9 +1,11 @@
 import { sign, verify } from "jsonwebtoken";
 import { APP } from "../../core/config/app";
-import { CreateTokenRepository, DeleteByIdRepository } from "../repositories";
+import { CreateTokenRepository } from "../repositories";
 import ms from "ms";
 import { CookiesInstance } from "./cookies";
 import { MsValue } from "../../core/utils/ms-utils";
+
+export type DeleteExpiredTokens = (userId?: string) => Promise<void>;
 
 type IssueJWTokenParams = {
   app: APP;
@@ -13,7 +15,7 @@ type IssueJWTokenParams = {
   cookies?: CookiesInstance;
   accessTokenExpiresIn?: MsValue;
   refreshTokenExpiresIn?: MsValue;
-  deleteUserRefreshTokens: DeleteByIdRepository;
+  deleteExpiredTokens: DeleteExpiredTokens;
   createRefreshToken: CreateTokenRepository<"REFRESH_TOKEN">;
 };
 
@@ -28,7 +30,7 @@ export const issueJWToken = async ({
   refreshTokenExpiresIn = "60Days",
   generateRefreshToken = false,
   createRefreshToken,
-  deleteUserRefreshTokens,
+  deleteExpiredTokens,
 }: IssueJWTokenParams) => {
   const token = sign({ userRole }, app.API_SECRET, {
     expiresIn: accessTokenExpiresIn,
@@ -43,7 +45,7 @@ export const issueJWToken = async ({
 
   if (!generateRefreshToken) return { token, refreshToken: null };
 
-  await deleteUserRefreshTokens(userId);
+  await deleteExpiredTokens(userId);
 
   const expiresAt = Date.now() + ms(refreshTokenExpiresIn);
 

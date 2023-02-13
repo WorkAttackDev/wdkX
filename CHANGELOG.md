@@ -1,5 +1,11 @@
 # @workattackdev/wdk
 
+## 0.4.5
+
+### Patch Changes
+
+- Adjust the delete expired token on issue jwt function
+
 ## 0.4.4
 
 ### Patch Changes

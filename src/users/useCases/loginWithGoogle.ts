@@ -10,7 +10,7 @@ import {
   FindUserByEmailRepository,
 } from "../repositories";
 import { CookiesInstance } from "../util/cookies";
-import { issueJWToken } from "../util/jwt";
+import { DeleteExpiredTokens, issueJWToken } from "../util/jwt";
 import {
   loginWithGoogleValidation,
   LoginWithGoogleValidationParams,
@@ -26,7 +26,7 @@ type Params = {
   findUserByEmail: FindUserByEmailRepository;
   createRefreshToken: CreateTokenRepository<"REFRESH_TOKEN">;
   createUserWithProvider: CreateUserRepository<LoginWithGoogleValidationParams>;
-  deleteUserRefreshTokens: DeleteByIdRepository;
+  deleteExpiredTokens: DeleteExpiredTokens;
 };
 
 export const loginWithGoogleUseCase = async ({
@@ -38,7 +38,7 @@ export const loginWithGoogleUseCase = async ({
   findUserByEmail,
   createRefreshToken,
   createUserWithProvider,
-  deleteUserRefreshTokens,
+  deleteExpiredTokens,
 }: Params): Promise<ApiResponse<{ user: User; token: string } | null>> => {
   try {
     const valData = loginWithGoogleValidation(data);
@@ -56,7 +56,7 @@ export const loginWithGoogleUseCase = async ({
       const { token } = await issueJWToken({
         app,
         createRefreshToken,
-        deleteUserRefreshTokens,
+        deleteExpiredTokens,
         userId: user.id,
         userRole: user.role,
         cookies,
@@ -73,7 +73,7 @@ export const loginWithGoogleUseCase = async ({
     const { token } = await issueJWToken({
       app,
       createRefreshToken,
-      deleteUserRefreshTokens,
+      deleteExpiredTokens,
       userId: newUser.id,
       cookies,
       generateRefreshToken: true,

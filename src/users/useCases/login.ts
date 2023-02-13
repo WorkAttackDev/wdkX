@@ -10,7 +10,7 @@ import {
 } from "../repositories";
 import { CookiesInstance } from "../util/cookies";
 import { compareHash } from "../util/hash";
-import { issueJWToken } from "../util/jwt";
+import { DeleteExpiredTokens, issueJWToken } from "../util/jwt";
 import { loginValidation } from "../validator/login";
 import { sanitizeUser } from "./utils/index";
 
@@ -23,7 +23,7 @@ export const loginUseCase = async <UserType extends User>({
   refreshTokenExpiresIn,
   findUserByEmail,
   createRefreshToken,
-  deleteUserRefreshTokens,
+  deleteExpiredTokens,
 }: {
   data: {
     email: string;
@@ -32,7 +32,7 @@ export const loginUseCase = async <UserType extends User>({
   app: APP;
   findUserByEmail: FindUserByEmailRepository;
   createRefreshToken: CreateTokenRepository<"REFRESH_TOKEN">;
-  deleteUserRefreshTokens: DeleteManyByIdRepository;
+  deleteExpiredTokens: DeleteExpiredTokens;
   cookiesInstance?: CookiesInstance;
   accessTokenExpiresIn?: MsValue;
   refreshTokenExpiresIn?: MsValue;
@@ -78,7 +78,7 @@ export const loginUseCase = async <UserType extends User>({
       userRole: user.role,
       cookies,
       createRefreshToken,
-      deleteUserRefreshTokens,
+      deleteExpiredTokens,
       accessTokenExpiresIn,
       refreshTokenExpiresIn,
     });

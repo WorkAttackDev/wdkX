@@ -13,7 +13,7 @@ import {
   FindTokenRepository,
 } from "../repositories";
 import { CookiesInstance } from "../util/cookies";
-import { issueJWToken } from "../util/jwt";
+import { DeleteExpiredTokens, issueJWToken } from "../util/jwt";
 import { sanitizeUser } from "./utils/index";
 
 export const refreshTokenUseCase = async <T>({
@@ -23,7 +23,7 @@ export const refreshTokenUseCase = async <T>({
   refreshTokenExpiresIn,
   createRefreshToken,
   deleteTokenRepository,
-  deleteUserRefreshTokens,
+  deleteExpiredTokens,
   findTokenByToken,
   findUserById,
 }: {
@@ -31,7 +31,7 @@ export const refreshTokenUseCase = async <T>({
   findUserById: FindByIdRepository<FullUser>;
   findTokenByToken: FindTokenRepository;
   deleteTokenRepository: DeleteTokenRepository;
-  deleteUserRefreshTokens: DeleteManyByIdRepository;
+  deleteExpiredTokens: DeleteExpiredTokens;
   createRefreshToken: CreateTokenRepository<"REFRESH_TOKEN">;
   cookies: CookiesInstance;
   accessTokenExpiresIn?: MsValue;
@@ -71,7 +71,7 @@ export const refreshTokenUseCase = async <T>({
       userRole: rToken.owner?.role,
       generateRefreshToken: true,
       createRefreshToken,
-      deleteUserRefreshTokens,
+      deleteExpiredTokens,
       cookies,
       accessTokenExpiresIn,
       refreshTokenExpiresIn,
