@@ -1,6 +1,6 @@
 import { APP } from "../../core/config/app";
 import { handleErrors } from "../../core/config/error";
-import { ApiResponse } from "../../core/config/types";
+import { ApiResponse } from "../../core/config/utils";
 import { MsValue } from "../../core/utils/ms-utils";
 import { User } from "../models/User";
 import {

@@ -1,6 +1,6 @@
 import ms from "ms";
 import { handleErrors } from "../../core/config/error";
-import { ApiResponse } from "../../core/config/types";
+import { ApiResponse } from "../../core/config/utils";
 import { APP } from "../../core/index";
 import { asyncTryCatch, tryCatch } from "../../core/utils/try-catch";
 import {

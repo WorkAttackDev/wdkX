@@ -1,5 +1,17 @@
 # @workattackdev/wdk
 
+## 0.4.8
+
+### Patch Changes
+
+- adjust the refreshTokenUseCase type T
+
+## 0.4.7
+
+### Patch Changes
+
+- adjusted the users util hash function export
+
 ## 0.4.5
 
 ### Patch Changes

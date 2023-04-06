@@ -1,6 +1,6 @@
 import { APP } from "../../core/config/app";
 import { handleErrors } from "../../core/config/error";
-import { ApiResponse } from "../../core/config/types";
+import { ApiResponse } from "../../core/config/utils";
 import {
   DeleteManyByIdRepository,
   FindByIdRepository,
@@ -16,7 +16,7 @@ import { CookiesInstance } from "../util/cookies";
 import { DeleteExpiredTokens, issueJWToken } from "../util/jwt";
 import { sanitizeUser } from "./utils/index";
 
-export const refreshTokenUseCase = async <T>({
+export const refreshTokenUseCase = async <T extends User>({
   app,
   cookies,
   accessTokenExpiresIn,
@@ -36,7 +36,7 @@ export const refreshTokenUseCase = async <T>({
   cookies: CookiesInstance;
   accessTokenExpiresIn?: MsValue;
   refreshTokenExpiresIn?: MsValue;
-}): Promise<ApiResponse<T | User | null>> => {
+}): Promise<ApiResponse<T | null>> => {
   const refreshToken = cookies.readCookie(app.REFRESH_TOKEN_COOKIE_NAME);
 
   if (!refreshToken)
@@ -88,7 +88,7 @@ export const refreshTokenUseCase = async <T>({
       });
     }
 
-    return { data: sanitizeUser(user), errors: null };
+    return { data: sanitizeUser(user) as T, errors: null };
   } catch (error) {
     return handleErrors({
       error,

@@ -1,6 +1,6 @@
 import { APP } from "../../core/config/app";
 import { handleErrors } from "../../core/config/error";
-import { ApiResponse } from "../../core/config/types";
+import { ApiResponse } from "../../core/config/utils";
 import { DeleteManyByIdRepository } from "../../core/data/repositories";
 import { MsValue } from "../../core/utils/ms-utils";
 import { User } from "../models/User";
@@ -52,7 +52,9 @@ export const loginUseCase = async <UserType extends User>({
     if (!user.emailVerified) {
       return handleErrors({
         error: new Error(),
-        messages: ["Usuário não verificado"],
+        messages: [
+          "Usuário não verificado, clique no link abaixo para verificar",
+        ],
       });
     }
 

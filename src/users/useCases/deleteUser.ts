@@ -1,5 +1,5 @@
 import { ERROR_CODE, handleErrors } from "../../core/config/error";
-import { ApiResponse } from "../../core/config/types";
+import { ApiResponse } from "../../core/config/utils";
 import { DeleteByIdRepository } from "../repositories";
 import { logoutUseCase, LogoutUseCaseParams } from "./logout";
 

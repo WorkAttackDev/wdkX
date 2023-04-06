@@ -1,5 +1,5 @@
 import { ZodError } from "zod";
-import { ApiResponse } from "./types";
+import { ApiResponse } from "./utils";
 
 export const handleErrors = ({
   error,
@@ -8,7 +8,7 @@ export const handleErrors = ({
   error: any;
   messages?: string[];
 }): ApiResponse<null> => {
-  !!process.env.WDK_LOG && console.log(error);
+  !!process.env.WDK_LOG && console.log(JSON.stringify(error));
 
   if (error instanceof ZodError) {
     return {
@@ -19,7 +19,7 @@ export const handleErrors = ({
 
   return {
     data: null,
-    errors: messages || [error?.message] || ["Ocorreu um erro"],
+    errors: messages || [error?.message || "Ocorreu um erro"],
   };
 };
 

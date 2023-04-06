@@ -1,5 +1,5 @@
 import { handleErrors } from "../../core/config/error";
-import { ApiResponse } from "../../core/config/types";
+import { ApiResponse } from "../../core/config/utils";
 import { FindByIdRepository } from "../../core/data/repositories";
 import { FullUser, User } from "../models/User";
 import { sanitizeUser } from "./utils";

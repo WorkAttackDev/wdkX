@@ -1,6 +1,6 @@
 import { APP } from "../../core/config/app";
 import { handleErrors } from "../../core/config/error";
-import { ApiResponse } from "../../core/config/types";
+import { ApiResponse } from "../../core/config/utils";
 import { DeleteByIdRepository } from "../repositories";
 import { CookiesInstance } from "../util/cookies";
 
@@ -34,7 +34,7 @@ export const logoutUseCase = async ({
     cookies.cleanCookie(app.ACCESS_TOKEN_COOKIE_NAME);
     cookies.cleanCookie(app.REFRESH_TOKEN_COOKIE_NAME);
     return {
-      data: true,
+      data: null,
       errors: ["ocorreu um erro ao terminar a sessão"],
     };
   }
